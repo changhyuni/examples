@@ -8,7 +8,7 @@ iam = session.client('iam')
 
 # IAM 사용자 생성
 response = iam.create_user(
-    UserName='new-iam-user'  # 생성할 사용자의 이름
+    UserName='user-sdk'  # 생성할 사용자의 이름
 )
 
 # 생성된 사용자의 정보 출력

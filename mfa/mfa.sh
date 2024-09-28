@@ -20,7 +20,8 @@ CREDENTIALS=$(aws sts get-session-token \
   --serial-number "$MFA_DEVICE_ARN" \
   --token-code "$MFA_CODE" \
   --profile "$SOURCE_PROFILE" \
-  --output json 2>/dev/null)
+  --output json \
+  --duration-seconds 3600)
 
 # 요청이 실패했을 경우 오류 메시지 출력
 if [ $? -ne 0 ]; then

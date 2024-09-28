@@ -1,0 +1,1 @@
+https://github.com/rebuy-de/aws-nuke?tab=readme-ov-file#install

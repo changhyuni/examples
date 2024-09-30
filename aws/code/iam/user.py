@@ -1,7 +1,7 @@
 import boto3
 
 # 세션 생성
-session = boto3.Session
+session = boto3.Session()
 
 # IAM 클라이언트 생성
 iam = session.client('iam')

@@ -1,1 +1,0 @@
-https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html

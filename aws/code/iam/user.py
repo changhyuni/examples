@@ -1,7 +1,7 @@
 import boto3
 
-# MFA 프로필을 사용하는 세션 생성
-session = boto3.Session(profile_name='mfa')
+# 세션 생성
+session = boto3.Session
 
 # IAM 클라이언트 생성
 iam = session.client('iam')

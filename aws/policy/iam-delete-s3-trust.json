@@ -3,8 +3,10 @@
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "sts:AssumeRole",
-      "Resource": "arn:aws:iam::123456789012:role/S3DeleteRole" 
+      "Principal": {
+        "AWS": "arn:aws:iam::123456789012:user/A-User" 
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }

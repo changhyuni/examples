@@ -24,7 +24,7 @@ print(assumed_session.get_credentials().get_frozen_credentials())
 s3_client = assumed_session.client('s3')
 
 # 삭제할 S3 버킷 이름
-bucket_name = 'your-bucket-name'
+bucket_name = 'fastcampusjune1'
 
 # S3 버킷 삭제
 s3_client.delete_bucket(Bucket=bucket_name)

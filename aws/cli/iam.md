@@ -11,3 +11,7 @@ aws configure set --profile s3 aws_session_token [SessionToken]
 
 [s3]
 aws s3 rb s3://{Bucket_NAME} --profile s3
+
+[profile assume]
+role_arn = arn:aws:iam::{ACCOUNT}:role/S3DeleteRole
+source_profile = default

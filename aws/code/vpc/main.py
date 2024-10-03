@@ -6,16 +6,16 @@ from nat_gateway import allocate_eip, create_nat_gateway
 from route_table import create_route_table, create_route_to_internet, create_route_to_nat_gateway, associate_route_table
 
 def main():
-    project_name = "june-project"
+    project_name = "june"
 
     # VPC 생성
-    vpc_id = create_vpc(project_name, "10.0.0.0/16")
+    vpc_id = create_vpc(project_name, "10.10.0.0/16")
 
     # 서브넷 생성
-    public_subnet_1 = create_subnet(project_name, vpc_id, "10.0.1.0/24", "ap-northeast-2a", True, 1)
-    public_subnet_2 = create_subnet(project_name, vpc_id, "10.0.2.0/24", "ap-northeast-2b", True, 2)
-    private_subnet_1 = create_subnet(project_name, vpc_id, "10.0.3.0/24", "ap-northeast-2a", False, 3)
-    private_subnet_2 = create_subnet(project_name, vpc_id, "10.0.4.0/24", "ap-northeast-2b", False, 4)
+    public_subnet_1 = create_subnet(project_name, vpc_id, "10.10.1.0/24", "ap-northeast-2a", True, 1)
+    public_subnet_2 = create_subnet(project_name, vpc_id, "10.10.2.0/24", "ap-northeast-2b", True, 2)
+    private_subnet_1 = create_subnet(project_name, vpc_id, "10.10.3.0/24", "ap-northeast-2a", False, 3)
+    private_subnet_2 = create_subnet(project_name, vpc_id, "10.10.4.0/24", "ap-northeast-2b", False, 4)
 
     # 인터넷 게이트웨이 생성
     igw_id = create_internet_gateway(project_name, vpc_id)

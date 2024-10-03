@@ -1,1 +1,1 @@
-  ssh -i ./{KEY_NAME}.pem {IP}
+ssh -i ./{KEY_NAME}.pem {IP}

@@ -21,13 +21,12 @@ locals {
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
-
-  cidr_adjusted = "${var.base_cidr_block}/24"
+  cidr = "${var.base_cidr_block}/24"
 }
 
 # Resource 
 resource "aws_vpc" "project1vpc" {
-  cidr_block = local.cidr_adjusted
+  cidr_block = local.cidr
   tags       = merge(local.default_tags, { Name = var.vpc_name })
 }
 
@@ -52,7 +51,7 @@ variable "vpc_name" {
 
 variable "environment" {
   type        = string
-  description = "Deployment environment (e.g., dev, prod)"
+  description = "DeploymTent environment (e.g., dev, prod)"
   default     = "development"
   validation {
     condition     = contains(["development", "staging", "production"], var.environment)

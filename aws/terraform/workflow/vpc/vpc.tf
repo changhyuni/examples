@@ -1,4 +1,3 @@
-# Settings Block
 terraform {
   required_version = "~> 1.0"
   required_providers {
@@ -9,15 +8,13 @@ terraform {
   }
 }
 
-# Provider Block
 provider "aws" {
   region  = "ap-northeast-2"
 }
 
-# Resource Block
-resource "aws_vpc" "project1vpc" {
+resource "aws_vpc" "vpc" {
     cidr_block = "192.168.0.0/24"
     tags = {
-        Name = "FirstVPC"
+        Name = "workflow"
     }
 }

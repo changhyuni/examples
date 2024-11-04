@@ -6,15 +6,15 @@ variable "user_roles" {
   default = {
     "june" = {
       role = "Kubernetes Engineer"
-      age  = 30
+      age  = 33
     }
     "robin" = {
       role = "Kubernetes Engineer"
-      age  = 28
+      age  = 23
     }
     "rex" = {
       role = "Cloud Engineer"
-      age  = 36
+      age  = 39
     }
   }
 }

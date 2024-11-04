@@ -15,5 +15,5 @@ output "iam_user_arns" {
 
 output "iam_user_arns_index" {
   description = "List of all IAM user ARNs"
-  value       = aws_iam_user.iam[0].arn
+  value       = aws_iam_user.iam[*].arn
 }

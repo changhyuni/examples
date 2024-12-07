@@ -1,5 +1,5 @@
 module "cluster" {
-  source                    = "../modules/cluster"
+  source                    = "../../../modules/cluster"
   enabled                   = true
   cluster_name              = "${local.name}-cluster"
   cluster_version           = "1.30"

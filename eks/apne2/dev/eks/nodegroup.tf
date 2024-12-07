@@ -1,5 +1,5 @@
 module "public_nodegroup" {
-  source                      = "../modules/nodegroup"
+  source                      = "../../../modules/nodegroup"
   nodegroup_name              = "${local.name}-public-nodegroup"
   eks_cluster_name            = "${local.name}-cluster"
   vpc_subnet_ids              = module.vpc.public_subnets
@@ -19,7 +19,7 @@ module "public_nodegroup" {
 }
 
 module "private_nodegroup" {
-  source                      = "../modules/nodegroup"
+  source                      = "../../../modules/nodegroup"
   nodegroup_name              = "${local.name}-private-nodegroup"
   eks_cluster_name            = "${local.name}-cluster"
   vpc_subnet_ids              = module.vpc.private_subnets

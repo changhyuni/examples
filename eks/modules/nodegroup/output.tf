@@ -27,8 +27,3 @@ output "nodegroup_instance_types" {
   description = "노드 그룹에 사용되는 인스턴스 타입"
   value       = var.nodegroup_instance_types
 }
-
-output "worker_node_role_arn" {
-  description = "생성된 EC2 워커 노드 IAM Role ARN"
-  value       = aws_iam_role.node_role.arn
-}

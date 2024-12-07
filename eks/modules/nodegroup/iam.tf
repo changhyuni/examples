@@ -3,7 +3,7 @@ data "aws_iam_policy" "SSMManagedInstanceCore" {
 }
 
 resource "aws_iam_role" "node_role" {
-  name               = format("%s-%s-node-role", local.environment, local.project)
+  name               = "${var.nodegroup_name}-node-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -19,7 +19,7 @@ resource "aws_iam_role" "node_role" {
 
   tags = merge(
     {
-      Name = format("%s-%s-node-role",  local.environment, local.project)
+      Name = "${var.nodegroup_name}-node-role"
     },
   )
 }
@@ -30,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "SSMManagedInstanceCore_attachment" {
 }
 
 resource "aws_iam_policy" "node_autoscaler_policy" {
-  name        = format("%s-%s-node-autoscaler-policy",  local.environment, local.project)
+  name        = "${var.nodegroup_name}-node-autoscaler-policy"
   path        = "/"
   description = "Node auto scaler policy for node groups."
   policy      = <<EOF

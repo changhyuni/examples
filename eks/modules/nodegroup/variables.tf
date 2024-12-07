@@ -1,13 +1,3 @@
-variable "environment" {
-  description = "환경명 (예: dev, prod)"
-  type        = string
-}
-
-variable "name" {
-  description = "리소스 기본 이름"
-  type        = string
-}
-
 variable "eks_cluster_name" {
   description = "EKS 클러스터 이름"
   type        = string
@@ -27,7 +17,7 @@ variable "nodegroup_name" {
 variable "nodegroup_instance_types" {
   description = "노드 그룹에 사용할 인스턴스 타입"
   type        = list(string)
-  default     = ["t3a.medium"]
+  default     = ["t2.micro"]
 }
 
 variable "nodegroup_capacity_type" {
@@ -89,20 +79,8 @@ variable "k8s_labels" {
   default     = {}
 }
 
-variable "worker_iam_role_arn" {
-  description = "워커 노드용 IAM Role ARN (외부에서 주입할 경우)"
-  type        = string
-  default     = ""
-}
-
 variable "nodegroup_network_interfaces_delete_on_termination" {
   description = "인스턴스 종료시 네트워크 인터페이스 삭제 여부"
-  type        = bool
-  default     = true
-}
-
-variable "nodegroup_volume_delete_on_termination" {
-  description = "인스턴스 종료시 볼륨 삭제 여부"
   type        = bool
   default     = true
 }
@@ -123,4 +101,9 @@ variable "kubelet_overrides_json" {
   description = "kubelet 설정 오버라이드 JSON 문자열"
   type        = string
   default     = "{}"
+}
+
+variable "node_security_group_ids" {
+  description = "노드 보안 그룹 ID"
+  type        = list(string)
 }

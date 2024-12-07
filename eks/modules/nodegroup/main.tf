@@ -19,13 +19,13 @@ data "aws_ami" "launch_template_ami" {
 }
 
 resource "aws_launch_template" "eks_template" {
-  name                   = local.launch_template_name
-  key_name               = var.eks_nodes_keypair_name
-  image_id               = data.aws_ami.launch_template_ami.image_id
+  name                     = local.launch_template_name
+  key_name                 = var.eks_nodes_keypair_name
+  image_id                 = data.aws_ami.launch_template_ami.image_id
   user_data = base64encode(templatefile("${path.module}/templates/scripts.sh.tpl", {
-    endpoint            = data.aws_eks_cluster.eks.endpoint
-    cluster_name        = var.eks_cluster_name
-    cluster_auth_base64 = data.aws_eks_cluster.eks.certificate_authority[0].data
+    endpoint               = data.aws_eks_cluster.eks.endpoint
+    cluster_name           = var.eks_cluster_name
+    cluster_auth_base64    = data.aws_eks_cluster.eks.certificate_authority[0].data
     kubelet_overrides_json = var.kubelet_overrides_json
   }))
   update_default_version = true
@@ -41,7 +41,7 @@ resource "aws_launch_template" "eks_template" {
   }
 
   network_interfaces {
-    delete_on_termination       = var.nodegroup_network_interfaces_delete_on_termination
+    security_groups = var.node_security_group_ids
   }
 
   monitoring {
@@ -52,7 +52,7 @@ resource "aws_launch_template" "eks_template" {
     resource_type = "instance"
     tags = merge(
       {
-        Name = format("%s-%s-%s", var.environment, var.nodegroup_name, "eks-node")
+        Name = var.nodegroup_name
       },
       var.tags
     )
@@ -62,7 +62,7 @@ resource "aws_launch_template" "eks_template" {
     resource_type = "volume"
     tags = merge(
       {
-        Name = format("%s-%s-%s", var.environment, var.nodegroup_name, "eks-volume")
+        Name = var.nodegroup_name
       },
       var.tags
     )
@@ -74,10 +74,12 @@ resource "aws_launch_template" "eks_template" {
 }
 
 resource "aws_eks_node_group" "nodegroup" {
+  ami_type        = "CUSTOM"
   subnet_ids      = var.vpc_subnet_ids
   cluster_name    = var.eks_cluster_name
-  node_role_arn   = var.worker_iam_role_arn
-  node_group_name = format("%s-%s-%s", var.environment, var.nodegroup_name, "ng")
+  node_role_arn   = aws_iam_role.node_role.arn
+  node_group_name = var.nodegroup_name
+
 
   scaling_config {
     desired_size = var.nodegroup_desired_size
@@ -88,21 +90,25 @@ resource "aws_eks_node_group" "nodegroup" {
   labels               = var.k8s_labels
   capacity_type        = var.nodegroup_capacity_type
   instance_types       = var.nodegroup_instance_types
-  force_update_version = true
 
   launch_template {
     id      = aws_launch_template.eks_template.id
-    version = aws_launch_template.eks_template.latest_version
+    version = aws_launch_template.eks_template.default_version
   }
 
   update_config {
-    max_unavailable_percentage = 50
+    max_unavailable = 1
   }
 
   tags = merge(
     {
-      Name = format("%s-%s-%s", var.environment, var.nodegroup_name, "ng")
+      Name = var.nodegroup_name
     },
     var.tags
   )
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+    # create_before_destroy = true
+  }
 }

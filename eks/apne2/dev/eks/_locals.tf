@@ -2,7 +2,7 @@
 locals {
   ## Common Configs
   name             = "${var.environment}-${var.project}"
-  my_ip            = "61.78.133.233/32"
+  my_ip            = "112.171.56.11/32"
   keypair_name     = "${var.environment}-${var.project}-keypair"  
   vpc_id           = data.terraform_remote_state.network.outputs.vpc_id
   private_subnets  = data.terraform_remote_state.network.outputs.private_subnets
@@ -19,6 +19,10 @@ locals {
       addon_name    = "coredns"
       addon_version = "v1.11.1-eksbuild.8"
     },
+    {
+      addon_name    = "vpc-cni"
+      addon_version = "v1.19.0-eksbuild.1"
+    }
   ]
 
   access_config = {

@@ -75,7 +75,6 @@ variable "cloudwatch_log_group_class" {
   default     = null
 }
 
-
 variable "upgrade_policy" {
   type = object({
     support_type = optional(string, null)

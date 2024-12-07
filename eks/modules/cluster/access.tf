@@ -2,7 +2,6 @@
 locals {
   enabled              = var.enabled
   eks_cluster_id       = aws_eks_cluster.this[0].name
-  certificate_authority_data = try(aws_eks_cluster.this[0].certificate_authority[0].data, "")
 
   eks_policy_short_abbreviation_map = {
     Admin        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"

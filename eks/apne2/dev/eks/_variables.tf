@@ -22,3 +22,8 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "remote_backend_bucket" {
+  description = "Remote backend bucket"
+  type        = string
+}

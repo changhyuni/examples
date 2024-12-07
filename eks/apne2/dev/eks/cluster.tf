@@ -3,7 +3,7 @@ module "cluster" {
   enabled                   = true
   cluster_name              = "${local.name}-cluster"
   cluster_version           = "1.30"
-  subnet_ids                = module.vpc.private_subnets
+  subnet_ids                = local.private_subnets
   
   # Optional variables
   endpoint_public_access     = true
@@ -13,5 +13,7 @@ module "cluster" {
   access_config              = local.access_config
   access_entry_map           = local.access_entry_map
 
-  depends_on = [ module.vpc ]
+  depends_on = [ 
+    aws_iam_role.bastion 
+  ]
 }

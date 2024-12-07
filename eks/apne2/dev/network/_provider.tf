@@ -9,3 +9,11 @@ provider "aws" {
     }    
   }
 }
+
+terraform {
+  backend "s3" {
+    bucket = "junetf-bucket"
+    key    = "terraform/network/terraform.tfstate"
+    region = "ap-northeast-2"
+  }
+}

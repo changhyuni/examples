@@ -1,2 +1,1 @@
-environment = "dev"
-project     = "cacoabank"
+remote_backend_bucket = "junetf-bucket"

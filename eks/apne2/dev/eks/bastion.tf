@@ -4,10 +4,8 @@ resource "aws_instance" "bastion" {
   subnet_id     = local.public_subnets[0]
   key_name      = local.keypair_name
   vpc_security_group_ids = [aws_security_group.bastion.id]
-
-  user_data = base64encode(templatefile("${path.module}/templates/bastion.sh.tpl", {
-    
-  }))
+  iam_instance_profile  = aws_iam_instance_profile.bastion.name
+  user_data = base64encode(templatefile("${path.module}/templates/bastion.sh.tpl", {}))
 
   tags = {
     Name = "bastion"
@@ -28,6 +26,11 @@ resource "aws_iam_role" "bastion" {
       }
     ]
   })
+}
+
+resource "aws_iam_instance_profile" "bastion" {
+  name = "bastion-profile"
+  role = aws_iam_role.bastion.name
 }
 
 resource "aws_iam_role_policy_attachment" "bastion" {

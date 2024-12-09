@@ -18,3 +18,4 @@ override.tf.json
 .sentinel
 .terraformrc
 terraform.rc
+*.pem

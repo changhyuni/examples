@@ -23,11 +23,10 @@ locals {
       addon_name    = "vpc-cni"
       addon_version = "v1.19.0-eksbuild.1"
     },
-    # Pod Identity Addon 실습 때 활성화
-    # {
-    #   addon_name    = "eks-pod-identity-agent"
-    #   addon_version = "v1.3.4-eksbuild.1"
-    # }
+    {
+      addon_name    = "eks-pod-identity-agent"
+      addon_version = "v1.3.4-eksbuild.1"
+    }
   ]
 
   access_config = {

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: awscli-deployment
+  namespace: kube-system
   labels:
     app: awscli
 spec:

@@ -22,12 +22,16 @@ locals {
     {
       addon_name    = "vpc-cni"
       addon_version = "v1.19.0-eksbuild.1"
-    }
+    },
+    # Pod Identity Addon 실습 때 활성화
+    # {
+    #   addon_name    = "eks-pod-identity-agent"
+    #   addon_version = "v1.3.4-eksbuild.1"
+    # }
   ]
 
   access_config = {
-    authentication_mode                         = "API_AND_CONFIG_MAP"
-    bootstrap_cluster_creator_admin_permissions = false
+    authentication_mode = "API"
   }
 
   access_entry_map = {

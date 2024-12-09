@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awscli-deployment
+  labels:
+    app: awscli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: awscli
+  template:
+    metadata:
+      labels:
+        app: awscli
+    spec:
+      containers:
+      - name: awscli
+        image: amazon/aws-cli:latest
+        command: ["sleep", "infinity"]
+        ports:
+        - containerPort: 80

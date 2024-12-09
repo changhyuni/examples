@@ -4,4 +4,6 @@ aws-cli   : https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-start
 python3   : https://www.python.org/downloads/
 vscode    : https://code.visualstudio.com/download
 terraform : https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+k9s       : https://k9scli.io/
+kubectl   : https://kubernetes.io/ko/docs/tasks/tools/
 vscode extension: terraform, python3, gitignore

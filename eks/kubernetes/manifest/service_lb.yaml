@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-loadbalancer-service
+  # annotations:
+  #   service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "60"
+  #   service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+  #   service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "environment=prod,owner=devops"
+  #   service.beta.kubernetes.io/aws-load-balancer-healthcheck-healthy-threshold: ""
+  #   service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold: "3"
+  #   service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval: "20"
+  #   service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout: "5"
+  #   service.beta.kubernetes.io/aws-load-balancer-security-groups: "sg-53fae93f"
+  #   service.beta.kubernetes.io/aws-load-balancer-extra-security-groups: "sg-53fae93f,sg-42efd82e"
+  #   service.beta.kubernetes.io/aws-load-balancer-target-node-labels: "ingress-gw,gw-name=public-api"
+  labels:
+    app: nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80      
+      targetPort: 80 

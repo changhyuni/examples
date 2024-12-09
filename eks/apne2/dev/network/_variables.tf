@@ -11,12 +11,6 @@ variable "project" {
   default     = "cacoabank"
 }
 
-variable "region" {
-  description = "AWS 리전"
-  type        = string
-  default     = "ap-northeast-2"
-}
-
 variable "environment" {
   description = "환경 이름 (예: dev, prod)"
   type        = string

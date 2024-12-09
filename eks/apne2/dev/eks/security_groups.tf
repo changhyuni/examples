@@ -1,29 +1,3 @@
-resource "aws_security_group" "public_node" {
-  name        = "${local.name}-public-node-sg"
-  description = "Public Node Security Group"
-  vpc_id      = local.vpc_id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [local.my_ip]
-    description = "Allow SSH traffic from admin PC"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all outbound traffic"
-  }
-
-  tags = {
-    Name = "${var.environment}-public-node-sg"
-  }
-}
-
 resource "aws_security_group" "private_node" {
   name        = "${local.name}-private-node-sg"
   description = "Private Node Security Group"
@@ -109,3 +83,29 @@ resource "aws_security_group" "bastion" {
     Name = "${var.environment}-bastion-sg"
   }
 }
+
+# resource "aws_security_group" "public_node" {
+#   name        = "${local.name}-public-node-sg"
+#   description = "Public Node Security Group"
+#   vpc_id      = local.vpc_id
+
+#   ingress {
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = [local.my_ip]
+#     description = "Allow SSH traffic from admin PC"
+#   }
+
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#     description = "Allow all outbound traffic"
+#   }
+
+#   tags = {
+#     Name = "${var.environment}-public-node-sg"
+#   }
+# }

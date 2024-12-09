@@ -7,7 +7,6 @@ module "addons" {
   addons                    = local.addons
   depends_on = [ 
     module.cluster,
-    module.private_nodegroup,
-    module.public_nodegroup 
+    module.private_nodegroup
   ]
 }

@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: empty
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.23.4-alpine3.17
+    volumeMounts:
+    - name: empty
+      mountPath: /mount
+  - name: awscli
+    image: amazon/aws-cli:latest
+    command: ["sleep", "infinity"]
+    volumeMounts:
+    - name: empty
+      mountPath: /mount
+  volumes:
+  - name : empty
+    emptyDir: {}
+---
+apiVersion: v1          
+kind: Pod               
+metadata:
+  name: hostpath         
+spec:
+  containers:
+  - name: container     
+    image: nginx:1.23.4-alpine3.17
+    volumeMounts:
+    - name: hostpath          # 볼륨 이름: "hostpath"
+      mountPath: /mount       # 이 볼륨을 컨테이너 내부 "/mount"에 마운트
+  volumes:
+  - name : hostpath           # "hostpath"라는 이름의 볼륨 정의
+    hostPath:
+      path: /june             # 호스트 노드의 "/june" 디렉토리를 Pod에 볼륨으로 마운트
+      type: DirectoryOrCreate # "/june" 디렉토리가 없으면 생성(DirectoryOrCreate)

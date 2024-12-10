@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebs-pv
+spec:
+  capacity:
+    storage: 5Gi              
+  volumeMode: Filesystem       
+  accessModes:
+    - ReadWriteOnce                      # EBS 볼륨은 RWO (단일 노드 R/W) 접근 모드
+  storageClassName: ""                   # StorageClass 미지정 (정적 프로비저닝 예)
+  persistentVolumeReclaimPolicy: Retain  # PVC 삭제 시 PV 유지
+  csi:
+    driver: ebs.csi.aws.com              # EBS CSI 드라이버
+    volumeHandle: vol-0c2280b8506243415  # EBS 볼륨 ID
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: topology.ebs.csi.aws.com/zone
+          operator: In
+          values:
+          - ap-northeast-2a   
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ebs
+spec:
+  containers:
+  - name: ebs
+    image: centos
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 1; done"]
+    volumeMounts:
+    - name: ebs
+      mountPath: /data
+  volumes:
+  - name: ebs
+    persistentVolumeClaim:
+      claimName: ebs-pvc

@@ -7,3 +7,6 @@ kubectl debug -it coredns-5b9dfbf96-565f8  --image=busybox --target=coredns -n k
 [aws-load-balacner-controller]
 helm repo add eks https://aws.github.io/eks-charts
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=dev-cacoabank-cluster -n kube-system --set serviceAccount.create=true --set replicaCount=1
+
+[storage]
+AmazonEBSCSIDriverPolicy

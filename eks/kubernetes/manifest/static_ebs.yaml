@@ -4,7 +4,7 @@ metadata:
   name: ebs-pv
 spec:
   capacity:
-    storage: 5Gi              
+    storage: 1Gi              
   volumeMode: Filesystem       
   accessModes:
     - ReadWriteOnce                      # EBS 볼륨은 RWO (단일 노드 R/W) 접근 모드
@@ -12,7 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain  # PVC 삭제 시 PV 유지
   csi:
     driver: ebs.csi.aws.com              # EBS CSI 드라이버
-    volumeHandle: vol-0c2280b8506243415  # EBS 볼륨 ID
+    volumeHandle: vol-0dbe174f63ecf40f7  # EBS 볼륨 ID
   nodeAffinity:
     required:
       nodeSelectorTerms:

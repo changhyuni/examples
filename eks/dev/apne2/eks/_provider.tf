@@ -13,7 +13,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "junetf-bucket"
-    key    = "terraform/eks/terraform.tfstate"
+    key    = "terraform/dev/eks/terraform.tfstate"
     region = "ap-northeast-2"
   }
 }

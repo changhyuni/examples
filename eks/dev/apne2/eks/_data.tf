@@ -12,7 +12,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "junetf-bucket"
-    key    = "terraform/network/terraform.tfstate"
+    key    = "terraform/dev/network/terraform.tfstate"
     region = "ap-northeast-2"
   }
 }

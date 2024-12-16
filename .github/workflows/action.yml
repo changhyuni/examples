@@ -1,0 +1,13 @@
+### .github/workflows/github-actions-demo-01.yml
+
+name: Github Push Event
+run-name: Run GitHub Actions
+on: [push]
+
+jobs:
+  github push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: |
+          echo "Github Push"

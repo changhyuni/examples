@@ -5,6 +5,10 @@ module "private_nodegroup" {
   vpc_subnet_ids              = local.private_subnets
   eks_nodes_keypair_name      = local.keypair_name
 
+  nodegroup_desired_size      = local.node_size
+  nodegroup_max_size          = local.node_max_size
+  nodegroup_min_size          = local.node_min_size
+
   node_security_group_ids = [
     aws_security_group.private_node.id,
     module.cluster.eks_cluster_security_group_id

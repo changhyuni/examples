@@ -1,6 +1,6 @@
 name: Github Push Event
-run-name: Run GitHub Actions
-on: [pull_request]
+run-name: Push
+on: [push]
 
 jobs:
   Push:

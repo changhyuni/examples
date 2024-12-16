@@ -1,11 +1,11 @@
-name: Github Push Event
-run-name: Push
-on: [push]
+name: Github Pull Event
+run-name: Pull
+on: [pull_request]
 
 jobs:
-  Push:
+  Pull:
     runs-on: ubuntu-latest
     steps:
       - name: echo
         run: |
-          echo "Github Push"
+          echo "Github Pull"

@@ -1,0 +1,22 @@
+dex:
+  enabled: false
+global:
+  domain: argocd.juneman.click
+configs:
+  params:
+    "server.insecure": true
+certificate:
+  enabled: false
+server:
+  ingress:
+    enabled: false
+controller:
+  clusterRoleRules:
+    enabled: true
+    rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - '*'

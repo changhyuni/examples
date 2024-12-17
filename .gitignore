@@ -19,3 +19,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 *.pem
+.DS_Store

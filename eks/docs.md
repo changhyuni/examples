@@ -10,3 +10,6 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set
 
 [storage]
 AmazonEBSCSIDriverPolicy
+
+[argocd]
+helm -n argocd install argocd argo/argo-cd -f ./argocd.yaml

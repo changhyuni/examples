@@ -8,7 +8,7 @@ module "vpc" {
   azs                     = ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
   private_subnets         = ["10.0.10.0/24", "10.0.20.0/24", "10.0.30.0/24"]
   ## ALB Controller 실습 때 서브넷 두개 이상  필요
-  public_subnets          = ["10.0.1.0/24", "10.0.2.0/24"]
+  public_subnets          = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   map_public_ip_on_launch = true
   enable_nat_gateway      = true 
   single_nat_gateway      = true

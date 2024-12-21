@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: python
+  name: python-production
   namespace: argocd
 spec:
   project: default
   source:
-    path: k8s/chart/python
+    path: k8s/python-production
     repoURL: https://github.com/inerplat/fastcampus-devops-testcode-example.git
     targetRevision: main
   destination:

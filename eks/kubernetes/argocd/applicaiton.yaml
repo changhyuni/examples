@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    path: eks/kubernetes/chart/python
-    repoURL: https://github.com/changhyuni/examples.git
+    path: k8s/chart/python
+    repoURL: https://github.com/inerplat/fastcampus-devops-testcode-example.git
     targetRevision: HEAD
   destination:
     namespace: python

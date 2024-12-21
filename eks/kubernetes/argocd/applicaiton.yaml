@@ -8,7 +8,7 @@ spec:
   source:
     path: k8s/chart/python
     repoURL: https://github.com/inerplat/fastcampus-devops-testcode-example.git
-    targetRevision: HEAD
+    targetRevision: v*
   destination:
     namespace: python
     server: "https://kubernetes.default.svc"

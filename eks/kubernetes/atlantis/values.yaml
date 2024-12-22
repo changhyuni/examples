@@ -6,7 +6,7 @@ github:
 
 repoConfig: |-                                     
   repos:                                         
-  - id: /.*/
+  - id: /github\.com/changhyuni/.*/
     apply_requirements: [approved, mergeable]
     import_requirements: [approved, mergeable]
     workflow: default

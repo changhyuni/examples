@@ -37,3 +37,6 @@ kubectl create secret generic atlantis-basic-auth \
 [atlantis]
 helm repo add atlantis https://runatlantis.github.io/helm-charts
 helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml
+
+[atlantis-command]
+https://www.runatlantis.io/docs/using-atlantis

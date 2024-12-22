@@ -3,6 +3,8 @@ orgAllowlist: github.com/changhyuni/*
 
 github:
   user: changhyuni
+#   token: github_token
+#   secret: github_webhook_token
 
 repoConfig: |-                                     
   repos:                                         
@@ -31,14 +33,10 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
   host: atlantis.juneman.click
 
-basicAuth:
-  username: "admin"
-  password: "admin1"
-
-vcsSecretName: ""
-basicAuthSecretName: ""
-
 volumeClaim:
   enabled: true
   dataStorage: 20Gi
   storageClassName: ebs
+
+vcsSecretName: "atlantis-vcs"
+basicAuthSecretName: "atlantis-basic-auth"

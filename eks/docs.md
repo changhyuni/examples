@@ -16,7 +16,24 @@ helm repo add argo https://argoproj.github.io/argo-helm
 helm -n argocd install argocd argo/argo-cd -f ./argocd.yaml
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
 
+[atlantis-token]
+github token   : echo -n 'glpat-xx-example' > /tmp/github_token
+github webhook : echo -n 'asdasdasdasd' > /tmp/github_secret
+basic username : echo -n 'admin' > /tmp/username
+basic password : echo -n 'asdasdasdasd' > /tmp/password
+
+webhook secret: https://www.browserling.com/tools/random-string
+
+kubectl create secret generic atlantis-vcs \
+  --namespace atlantis \
+  --from-file=/tmp/github_token \
+  --from-file=/tmp/github_secret
+
+kubectl create secret generic atlantis-basic-auth \
+  --namespace atlantis \
+  --from-file=/tmp/username \
+  --from-file=/tmp/password
+
 [atlantis]
 helm repo add atlantis https://runatlantis.github.io/helm-charts
 helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml
-webhook secret: https://www.browserling.com/tools/random-string

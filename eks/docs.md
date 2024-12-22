@@ -18,5 +18,5 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 [atlantis]
 helm repo add atlantis https://runatlantis.github.io/helm-charts
-
+helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml
 webhook secret: https://www.browserling.com/tools/random-string

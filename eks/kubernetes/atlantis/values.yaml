@@ -19,14 +19,13 @@ repoConfig: |-
       apply:
         steps: [apply]    
 
-enableDiffMarkdownFormat: true 
-
 ingress:
   enabled: true
   ingressClassName: alb
   annotations:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    # https://www.runatlantis.io/docs/api-endpoints
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip

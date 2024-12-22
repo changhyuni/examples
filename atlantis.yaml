@@ -7,7 +7,7 @@ parallel_apply: true
 projects:
   - name: dev
     #branch: /main/
-    dir: eks/dev/apne2/eks
+    dir: .
     workspace: default
     autoplan:
       when_modified: [ "*.tf", "../modules/**/*.tf", "*.tfvars" ]

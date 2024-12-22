@@ -12,5 +12,11 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set
 AmazonEBSCSIDriverPolicy
 
 [argocd]
+helm repo add argo https://argoproj.github.io/argo-helm
 helm -n argocd install argocd argo/argo-cd -f ./argocd.yaml
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+
+[atlantis]
+helm repo add atlantis https://runatlantis.github.io/helm-charts
+
+webhook secret: https://www.browserling.com/tools/random-string

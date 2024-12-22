@@ -1,0 +1,13 @@
+# StorageClass 정의
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ebs                             
+allowVolumeExpansion: true              
+provisioner: ebs.csi.aws.com            
+volumeBindingMode: WaitForFirstConsumer 
+parameters:
+  type: gp3                             
+  allowAutoIOPSPerGBIncrease: 'false'   
+  encrypted: 'false'                    
+reclaimPolicy: Delete                    

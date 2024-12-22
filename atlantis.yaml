@@ -1,0 +1,30 @@
+# atlantis.yaml
+version: 3
+automerge: false
+delete_source_branch_on_merge: true
+parallel_plan: true
+parallel_apply: true
+projects:
+  - name: dev
+    #branch: /main/
+    dir: ./eks
+    workspace: default
+    autoplan:
+      when_modified: [ "*.tf", "../modules/**/*.tf", "*.tfvars" ]
+      enabled: true
+    terraform_version: v1.6.6
+    apply_requirements: [ approved ]
+    workflow: dev_workflow
+workflows:
+  dev_workflow:
+    plan:
+      steps:
+        - run: echo "terraform init"
+        - init
+        - run: echo "terraform plan"
+        - plan:
+            extra_args: [ -var-file=../../../tfvars/dev.tfvars ]
+    apply:
+      steps:
+        - run: echo "terraform apply"
+        - apply

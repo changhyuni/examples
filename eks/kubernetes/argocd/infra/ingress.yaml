@@ -5,7 +5,6 @@ metadata:
   namespace: argocd
   annotations:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/healthcheck-path: /login
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/inbound-cidrs: "112.171.56.11/32"
     alb.ingress.kubernetes.io/scheme: internet-facing

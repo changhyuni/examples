@@ -1,0 +1,45 @@
+atlantisUrl: http://atlantis.juneman.click
+orgAllowlist: github.com/changhyuni/examples/*
+
+github:
+  user: changhyuni
+
+repoConfig: |-                                     
+  repos:                                         
+  - id: /.*/
+    apply_requirements: [approved, mergeable]
+    import_requirements: [approved, mergeable]
+    workflow: default
+    allowed_overrides: [workflow, apply_requirements]
+    allow_custom_workflows: true
+  workflows:
+    default:
+      plan:
+        steps: [init, plan]
+      apply:
+        steps: [apply]    
+
+enableDiffMarkdownFormat: true 
+
+ingress:
+  enabled: true
+  ingressClassName: alb
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  host: atlantis.juneman.click
+
+basicAuth:
+  username: "admin"
+  password: "admin1"
+
+vcsSecretName: ""
+basicAuthSecretName: ""
+
+volumeClaim:
+  enabled: true
+  dataStorage: 20Gi
+  storageClassName: ebs

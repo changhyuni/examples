@@ -1,5 +1,5 @@
 atlantisUrl: http://atlantis.juneman.click
-orgAllowlist: github.com/changhyuni/examples/*
+orgAllowlist: github.com/changhyuni/*
 
 github:
   user: changhyuni

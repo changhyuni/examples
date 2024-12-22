@@ -8,6 +8,7 @@ spec:
   source:
     path: k8s/python-production
     repoURL: https://github.com/inerplat/fastcampus-devops-testcode-example.git
+    ## 레포의 Branch 현재는 main
     targetRevision: main
   destination:
     namespace: python

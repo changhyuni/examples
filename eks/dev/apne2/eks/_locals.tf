@@ -10,8 +10,9 @@ locals {
   bastion_role_arn = aws_iam_role.bastion.arn
 
   ## EKS Cluster Configs
-  node_size     = 10
-  node_max_size = 10
+  node_type     = ["t3.medium"]
+  node_size     = 5
+  node_max_size = 5
   node_min_size = 1
 
   addons = [
@@ -26,10 +27,6 @@ locals {
     {
       addon_name    = "vpc-cni"
       addon_version = "v1.19.0-eksbuild.1"
-    },
-    {
-      addon_name    = "eks-pod-identity-agent"
-      addon_version = "v1.3.4-eksbuild.1"
     }
   ]
 

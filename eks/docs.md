@@ -40,3 +40,7 @@ helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml
 
 [atlantis-command]
 https://www.runatlantis.io/docs/using-atlantis
+
+[prometheus]
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml

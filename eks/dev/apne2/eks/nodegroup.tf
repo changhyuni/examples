@@ -8,6 +8,7 @@ module "private_nodegroup" {
   nodegroup_desired_size      = local.node_size
   nodegroup_max_size          = local.node_max_size
   nodegroup_min_size          = local.node_min_size
+  nodegroup_instance_types    = local.node_type
 
   node_security_group_ids = [
     aws_security_group.private_node.id,

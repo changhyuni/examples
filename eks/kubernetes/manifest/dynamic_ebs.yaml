@@ -3,6 +3,10 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
+  # 아래 어노테이션을 추가하면 해당 스토리지 클레스가 Default로 지정됨
+  # pvc 생성 시 storageclass를 따로 지정하지 않으면 Default Class가 적용됨
+  # annotations:
+  #   storageclass.kubernetes.io/is-default-class: "true"
   name: ebs                              # StorageClass 이름: "ebs"
 allowVolumeExpansion: true               # PVC의 용량 확장을 허용
 provisioner: ebs.csi.aws.com             # AWS EBS CSI 드라이버 사용

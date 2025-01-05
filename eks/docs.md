@@ -6,15 +6,16 @@ kubectl debug -it coredns-5b9dfbf96-565f8  --image=busybox --target=coredns -n k
 
 [aws-load-balacner-controller]
 helm repo add eks https://aws.github.io/eks-charts
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=dev-cacoabank-cluster -n kube-system --set serviceAccount.create=true --set replicaCount=1
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set clusterName=dev-cacoabank-cluster -n kube-system --set serviceAccount.create=true --set replicaCount=1 --version 1.10.1
 
 [storage]
 AmazonEBSCSIDriverPolicy
 
 [argocd]
 helm repo add argo https://argoproj.github.io/argo-helm
-helm -n argocd install argocd argo/argo-cd -f ./argocd.yaml
+helm -n argocd install argocd argo/argo-cd -f ./argocd.yaml --version 7.7.10
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+helm uninstall argocd -n argocd
 
 [atlantis-token]
 github token   : echo -n 'glpat-xx-example' > /tmp/github_token
@@ -36,11 +37,23 @@ kubectl create secret generic atlantis-basic-auth \
 
 [atlantis]
 helm repo add atlantis https://runatlantis.github.io/helm-charts
-helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml
+helm upgrade --install atlantis atlantis/atlantis -n atlantis -f values.yaml --version 5.12.0
+helm uninstall atlantis -n atlantis
+
 
 [atlantis-command]
 https://www.runatlantis.io/docs/using-atlantis
 
 [prometheus]
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml --version 67.5.0
 helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
+helm uninstall prometheus -n monitoring
+kubectl get secret prometheus-grafana -o jsonpath="{.data.admin-password}" -n monitoring | base64 --decode ; echo
+
+[mimir]
+helm repo add grafana https://grafana.github.io/helm-charts
+helm install mimir grafana/mimir-distributed -n monitoring -f values.yaml --version 5.5.1
+helm upgrade --install mimir grafana/mimir-distributed -n monitoring -f values.yaml
+helm uninstall mimir -n monitoring
+mimir endpoint: http://mimir-nginx.monitoring.svc:80/prometheus

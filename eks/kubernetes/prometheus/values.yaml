@@ -13,7 +13,7 @@ grafana:
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
       alb.ingress.kubernetes.io/success-codes: 200-399
       alb.ingress.kubernetes.io/group.name: "monitoring"
-      alb.ingress.kubernetes.io/inbound-cidrs: "220.70.12.210"
+      alb.ingress.kubernetes.io/inbound-cidrs: "112.171.56.11/32"
     hosts:
     - grafana.juneman.click
     paths:
@@ -25,9 +25,22 @@ grafana:
     accessModes:
     - ReadWriteOnce
     size: 10Gi
+
+  #
+  # 아래 설정 "true" 시 grafana에서 지정한 Dashboard / Datasource가 자동으로 추가됨
+  # 
+  sidecar:
+    dashboards:
+      enabled: false
+    datasources:
+      enabled: false
     
 
 prometheus:
+  #
+  # agentMode는 Grafana Mimir 실습 때 사용              
+  #
+  agentMode: true
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
     retention: 5d
@@ -40,16 +53,18 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+    #
+    # remoteWrite는 Grafana Mimir 실습 때 사용              
+    #
+    remoteWrite:
+      - url: http://mimir-nginx.monitoring.svc:80/api/v1/push
 
 prometheusOperator:
-  # -operator 설치
   enabled: true
   tls:
     enabled: false
 
   admissionWebhooks:
-    # PrometheusRules의 형식이 올바른지 확인해주는 기능인데 control plane이 webhook 서비스에
-    # 접근할 수 있어야하는 문제가 있습니다.
     enabled: true
     patch:
       tolerations: []

@@ -1,0 +1,45 @@
+mimir:
+  structuredConfig:
+    limits:
+      max_label_names_per_series: 60
+      compactor_blocks_retention_period: 30d
+    blocks_storage:
+      backend: s3
+      s3:
+        bucket_name: june-mimir
+        endpoint: s3.ap-northeast-2.amazonaws.com
+        region: ap-northeast-2
+      tsdb:
+        retention_period: 13h
+      bucket_store:
+        ignore_blocks_within: 10h
+    querier:
+      query_store_after: 12h
+    ingester:
+      ring:
+        replication_factor: 1
+
+ingester:
+  replicas: 1
+  zoneAwareReplication:
+    enabled: false
+
+store_gateway:
+  replicas: 1
+  zoneAwareReplication:
+    enabled: false
+
+querier:
+  replicas: 1
+
+ruler_query_scheduler:
+  replicas: 1
+
+ruler:
+  replicas: 1
+
+minio:
+  enabled: false
+  
+ingress:
+  enabled: false

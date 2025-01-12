@@ -1,0 +1,37 @@
+role: "Agent"
+service:
+  ports:
+    - name: prom-exporter
+      port: 9598
+containerPorts:
+  - name: prom-exporter
+    containerPort: 9598
+    protocol: TCP  
+customConfig:
+  api:
+    enabled: true
+  data_dir: /vector-data-dir
+  sources:
+    kubernetes_logs:
+      type: kubernetes_logs
+  # transform-kube:
+  #   condition: .level != "debug"
+  #   inputs:
+  #   - kube_logs
+  #   type: filter
+  sinks:
+   loki:
+      type: loki
+      inputs: [kubernetes_logs]
+      encoding:
+        codec: json
+      endpoint: http://loki-loki-distributed-gateway.monitoring.svc.cluster.local:80
+      labels:
+        forwarder: "vector"
+        cluster: "development"
+        namespace: |-
+            {{ print "{{ kubernetes.pod_namespace }}" }}
+        pod: |-
+            {{ print "{{ kubernetes.pod_name }}" }}
+        container: |-
+            {{ print "{{ kubernetes.container_name }}" }}

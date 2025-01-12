@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: a
+spec:
+  selector:
+    app: a
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 7000
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: a
+  template:
+    metadata:
+      labels:
+        app: a
+    spec:
+      containers:
+      - name: a
+        image: bhs9610/python:otel-manuel-a
+        command: ["/bin/sh"]
+        args:
+        - "-c"
+        - |
+          OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://${HOST_IP}:4318/v1/traces python manuel.py
+        ports:
+        - containerPort: 7000
+          name: http
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: B_HOST
+          value: "b"
+        - name: B_PORT
+          value: "80"
+        - name: PORT
+          value: "7000"
+        - name: OTEL_SERVICE_NAME
+          value: "a"
+        - name: OTEL_TRACES_EXPORTER
+          value: "console,otlp"
+        - name: OTEL_EXPORTER_OTLP_TRACES_HEADERS
+          value: "api-key=key,other-config-value=value"
+        - name: OTEL_TRACES_SAMPLER_ARG
+          value: "1"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "http/protobuf"
+        - name: OTEL_METRICS_EXPORTER
+          value: "none"

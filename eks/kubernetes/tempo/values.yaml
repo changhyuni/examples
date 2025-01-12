@@ -1,0 +1,44 @@
+traces:
+  otlp:
+    http:
+      enabled: true
+    grpc:
+      enabled: true
+tempo:
+  structuredConfig:
+    ingester:
+      lifecycler:
+        ring:
+          replication_factor: 1
+      max_block_bytes: 104857600
+      max_block_duration: 10m
+      complete_block_timeout: 15m
+
+storage:
+  trace:
+    backend: s3
+    s3:
+      region: ap-northeast-2
+      bucket: "june-mimir"
+      endpoint:  "s3.ap-northeast-2.amazonaws.com"
+      insecure: true
+    search:
+      cache_control:
+        footer: true
+    pool:
+      max_workers: 400
+      queue_depth: 20000
+    wal:
+      path: /var/tempo/wal
+
+distributor:
+  replicas: 1
+  config:
+    log_received_spans:
+      enabled: true
+
+ingester:
+  replicas: 1
+  persistence:
+    enabled: true
+    size: 10Gi

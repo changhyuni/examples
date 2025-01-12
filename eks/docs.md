@@ -43,17 +43,3 @@ helm uninstall atlantis -n atlantis
 
 [atlantis-command]
 https://www.runatlantis.io/docs/using-atlantis
-
-[prometheus]
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml --version 67.5.0
-helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
-helm uninstall prometheus -n monitoring
-kubectl get secret prometheus-grafana -o jsonpath="{.data.admin-password}" -n monitoring | base64 --decode ; echo
-
-[mimir]
-helm repo add grafana https://grafana.github.io/helm-charts
-helm install mimir grafana/mimir-distributed -n monitoring -f values.yaml --version 5.5.1
-helm upgrade --install mimir grafana/mimir-distributed -n monitoring -f values.yaml
-helm uninstall mimir -n monitoring
-mimir endpoint: http://mimir-nginx.monitoring.svc:80/prometheus

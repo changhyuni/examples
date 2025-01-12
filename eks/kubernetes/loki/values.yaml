@@ -1,0 +1,458 @@
+loki:
+  # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
+  schemaConfig:
+    configs:
+      - from: 2023-01-01
+        store: tsdb
+        object_store: s3
+        schema: v12
+        index:
+          prefix: loki_index_
+          period: 24h
+
+  # S3 설정
+  storageConfig:
+    aws:
+      s3forcepathstyle: true
+      region: ap-northeast-2
+      bucketnames: june-mimir
+      insecure: false
+      sse_encryption: true
+    tsdb_shipper:
+      active_index_directory: /var/loki/tsdb-index
+      cache_location: /var/loki/tsdb-cache
+      index_gateway_client:
+        server_address: dns:///loki-loki-distributed-index-gateway:9095
+      shared_store: s3
+      cache_ttl: 24h
+
+  # -- Structured loki configuration, takes precedence over `loki.config`, `loki.schemaConfig`, `loki.storageConfig`
+  structuredConfig:
+
+    # Common
+    common:
+      ring:
+        kvstore:
+          store: memberlist
+
+    # Server
+    server:
+      http_listen_port: 3100
+      # Message 크기 설정
+      grpc_server_max_recv_msg_size: 104857600  # 100 Mb
+      grpc_server_max_send_msg_size: 104857600  # 100 Mb
+
+      http_server_write_timeout: 310s
+      http_server_read_timeout: 310s
+
+
+    ## Limit
+    limits_config:
+      # 동시성 설정
+      # queriers * max_concurrent >= max_query_parallelism
+      # 3 * 7 = 21
+      max_query_parallelism: 21
+      split_queries_by_interval: 15m
+
+      enforce_metric_name: false
+
+      reject_old_samples: true
+      reject_old_samples_max_age: 24h
+
+      # 그 외 : 1달 보관
+      retention_period: 672h
+
+      # # Dev, QA, Stage
+      # retention_stream:
+      #   - selector: '{env="dev"}'
+      #     priority: 1
+      #     period: 168h
+      #   - selector: '{env="qa"}'
+      #     priority: 2
+      #     period: 168h
+      #   - selector: '{env="stage"}'
+      #     priority: 3
+      #     period: 168h
+      #   - selector: '{type="jenkins-job-logs"}'
+      #     priority: 4
+      #     period: 168h
+
+      ingestion_rate_mb: 20
+      ingestion_burst_size_mb: 30
+
+      per_stream_rate_limit: 3MB
+      per_stream_rate_limit_burst: 10MB
+      max_streams_matchers_per_query: 400
+
+      max_query_series: 400
+      max_chunks_per_query: 700000
+
+    ## Ruler
+    ruler:
+      storage:
+        type: local
+        local:
+          directory: /var/loki/rules
+      ring:
+        kvstore:
+          store: memberlist
+      alertmanager_url: http://mimir-distributed-alertmanager.mimir.svc.cluster.local:8080
+      enable_api: true
+      enable_alertmanager_v2: true
+
+
+    ## Compactor
+    compactor:
+      shared_store: s3
+      retention_delete_delay: 2h
+      retention_enabled: true
+
+    # Frontend Worker
+    frontend_worker:
+      scheduler_address: loki-loki-distributed-query-scheduler:9095
+      match_max_concurrent: true
+      grpc_client_config:
+        max_recv_msg_size: 104857600  # 100 Mb
+        max_send_msg_size: 104857600  # 100 Mb
+        grpc_compression: snappy
+
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 10000
+      grpc_client_config:
+        max_recv_msg_size: 104857600  # 100 Mb
+        max_send_msg_size: 104857600  # 100 Mb
+        grpc_compression: snappy
+
+    # Table Manager
+    table_manager:
+      retention_deletes_enabled: false
+
+    # Query Range
+    query_range:
+      align_queries_with_step: true
+      max_retries: 3
+      cache_results: true
+      results_cache:
+        cache:
+          embedded_cache:
+            enabled: true
+            max_size_mb: 1024
+            ttl: 24h
+
+    # Ingester
+    ingester:
+      lifecycler:
+        ring:
+          kvstore:
+            store: memberlist
+          replication_factor: 3
+
+      chunk_retain_period: 1m
+      chunk_idle_period: 2h
+      chunk_target_size: 1536000
+      max_chunk_age: 2h
+      chunk_block_size: 262144
+      chunk_encoding: snappy
+
+      wal:
+        dir: /var/loki/wal
+        enabled: true
+        replay_memory_ceiling: 10GB
+
+    # Ingester Client
+    ingester_client:
+      grpc_client_config:
+        # Message 크기 설정
+        max_recv_msg_size: 104857600  # 100 Mb
+        max_send_msg_size: 104857600  # 100 Mb
+        grpc_compression: snappy
+
+    #TODO: Querier CPU에 따라서 max_concurrent 조정 , CPU * 2 = max_concurrent
+    # Querier : 3 Core , 6GiB
+    querier:
+      query_timeout: 300s
+      max_concurrent: 7
+      engine:
+        timeout: 300s
+
+    ## frontend
+    frontend:
+      scheduler_address: loki-loki-distributed-query-scheduler.monitoring.svc.cluster.local:9095
+      grpc_client_config:
+        max_recv_msg_size: 104857600  # 100 Mb
+        max_send_msg_size: 104857600  # 100 Mb
+        grpc_compression: snappy
+#      tail_proxy_url: http://loki-distributed-querier:9095
+#      downstream_url: http://loki-distributed-querier.monitoring.svc.cluster.local:3100
+
+    ## Distributor
+    distributor:
+      ring:
+        kvstore:
+          store: memberlist
+
+# -- Provides a reloadable runtime configuration file for some specific configuration
+runtimeConfig: {}
+
+serviceAccount:
+  # -- Specifies whether a ServiceAccount should be created
+  create: true
+  # -- The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: null
+  # -- Image pull secrets for the service account
+  imagePullSecrets: []
+  # -- Annotations for the service account
+  annotations: {}
+  # -- Set this toggle to false to opt out of automounting API credentials for the service account
+  automountServiceAccountToken: true
+
+# RBAC configuration
+rbac:
+  # -- If pspEnabled true, a PodSecurityPolicy is created for K8s that use psp.
+  pspEnabled: false
+  # -- For OpenShift set pspEnabled to 'false' and sccEnabled to 'true' to use the SecurityContextConstraints.
+  sccEnabled: false
+
+# ServiceMonitor configuration
+serviceMonitor:
+  # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
+  enabled: false
+  # -- Alternative namespace for ServiceMonitor resources
+  namespace: loki
+  # -- Namespace selector for ServiceMonitor resources
+  namespaceSelector: {}
+  # -- ServiceMonitor annotations
+  annotations: {}
+  # -- Additional ServiceMonitor labels
+  labels: {}
+  # -- ServiceMonitor scrape interval
+  interval: null
+  # -- ServiceMonitor scrape timeout in Go duration format (e.g. 15s)
+  scrapeTimeout: null
+  # -- ServiceMonitor relabel configs to apply to samples before scraping
+  # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+  relabelings: []
+  # -- ServiceMonitor metric relabel configs to apply to samples before ingestion
+  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#endpoint
+  metricRelabelings: []
+  # --ServiceMonitor will add labels from the service to the Prometheus metric
+  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec
+  targetLabels: []
+  # -- ServiceMonitor will use http by default, but you can pick https as well
+  scheme: http
+  # -- ServiceMonitor will use these tlsConfig settings to make the health check requests
+  tlsConfig: null
+
+# Rules for the Prometheus Operator
+# prometheusRule:
+#   # -- If enabled, a PrometheusRule resource for Prometheus Operator is created
+#   enabled: true
+#   # -- Alternative namespace for the PrometheusRule resource
+#   namespace: null
+#   # -- PrometheusRule annotations
+#   annotations: {}
+#   # -- Additional PrometheusRule labels
+#   labels: {}
+#   # -- Contents of Prometheus rules file
+#   groups:
+#     - name: loki_rules
+#       rules:
+#         - expr: histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, job))
+#           record: cluster_job:loki_request_duration_seconds:99quantile
+#         - expr: histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, job))
+#           record: cluster_job:loki_request_duration_seconds:50quantile
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, job) / sum(rate(loki_request_duration_seconds_count[1m]))
+#             by (cluster, job)
+#           record: cluster_job:loki_request_duration_seconds:avg
+#         - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, cluster, job)
+#           record: cluster_job:loki_request_duration_seconds_bucket:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, job)
+#           record: cluster_job:loki_request_duration_seconds_sum:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (cluster, job)
+#           record: cluster_job:loki_request_duration_seconds_count:sum_rate
+#         - expr: histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, job, route))
+#           record: cluster_job_route:loki_request_duration_seconds:99quantile
+#         - expr: histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, job, route))
+#           record: cluster_job_route:loki_request_duration_seconds:50quantile
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, job, route)
+#             / sum(rate(loki_request_duration_seconds_count[1m])) by (cluster, job, route)
+#           record: cluster_job_route:loki_request_duration_seconds:avg
+#         - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, cluster, job,
+#             route)
+#           record: cluster_job_route:loki_request_duration_seconds_bucket:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, job, route)
+#           record: cluster_job_route:loki_request_duration_seconds_sum:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (cluster, job, route)
+#           record: cluster_job_route:loki_request_duration_seconds_count:sum_rate
+#         - expr: histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, namespace, job, route))
+#           record: cluster_namespace_job_route:loki_request_duration_seconds:99quantile
+#         - expr: histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+#             by (le, cluster, namespace, job, route))
+#           record: cluster_namespace_job_route:loki_request_duration_seconds:50quantile
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, namespace,
+#             job, route) / sum(rate(loki_request_duration_seconds_count[1m])) by (cluster,
+#             namespace, job, route)
+#           record: cluster_namespace_job_route:loki_request_duration_seconds:avg
+#         - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, cluster, namespace,
+#             job, route)
+#           record: cluster_namespace_job_route:loki_request_duration_seconds_bucket:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (cluster, namespace,
+#             job, route)
+#           record: cluster_namespace_job_route:loki_request_duration_seconds_sum:sum_rate
+#         - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (cluster, namespace,
+#             job, route)
+#           record: cluster_namespace_job_route:loki_request_duration_seconds_count:sum_rate
+
+# Configuration for the ingester
+ingester:
+  # -- Kind of deployment [StatefulSet/Deployment]
+  kind: StatefulSet
+  # -- Number of replicas for the ingester
+  replicas: 1
+  resources:
+    requests:
+      cpu: 300m
+      memory: 500Mi
+    limits:
+      memory: 2Gi
+  # -- Pod Disruption Budget maxUnavailable
+  maxUnavailable: 1
+  # -- Tolerations for ingester pods
+  tolerations: []
+  # -- readiness probe settings for ingester pods. If empty, use `loki.readinessProbe`
+  readinessProbe: {}
+  # -- liveness probe settings for ingester pods. If empty use `loki.livenessProbe`
+  livenessProbe: {}
+  persistence:
+    # -- Enable creating PVCs which is required when using boltdb-shipper
+    enabled: true
+    # -- Use emptyDir with ramdisk for storage. **Please note that all data in ingester will be lost on pod restart**
+    inMemory: false
+    size: 30Gi
+    storageClass: gp3
+    # -- Annotations for ingester PVCs
+    annotations: {}
+
+  # -- Adds the appProtocol field to the ingester service. This allows ingester to work with istio protocol selection.
+  appProtocol:
+    # -- Set the optional grpc service protocol. Ex: "grpc", "http2" or "https"
+    grpc: ""
+
+
+# Configuration for the distributor
+distributor:
+  # -- Number of replicas for the distributor
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 400Mi
+    limits:
+      memory: 600Mi
+
+# Configuration for the querier
+querier:
+  # -- Number of replicas for the querier
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 400Mi
+    limits:
+      memory: 1Gi
+
+
+# Configuration for the query-frontend
+queryFrontend:
+  # -- Number of replicas for the query-frontend
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 500Mi
+    limits:
+      memory: 1Gi
+
+# Configuration for the query-scheduler
+queryScheduler:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: 70m
+      memory: 150Mi
+    limits:
+      memory: 300Mi
+
+# Configuration for the gateway
+gateway:
+  enabled: true
+  replicas: 1
+  # -- Enable logging of 2xx and 3xx HTTP requests
+  verboseLogging: true
+  resources:
+    requests:
+      cpu: 25m
+      memory: 100Mi
+    limits:
+      memory: 200Mi
+
+
+
+# Configuration for the compactor
+compactor:
+  enabled: true
+  resources:
+    requests:
+      cpu: 150m
+      memory: 500Mi
+    limits:
+      memory: 1Gi
+  persistence:
+    enabled: true
+    size: 10Gi
+    # storageClass: gp3
+    # annotations: {}
+
+# Configuration for the ruler
+ruler:
+  enabled: true
+  kind: StatefulSet
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 500Mi
+    limits:
+      memory: 1Gi
+  # directories:
+  #   fake:
+  #     loki-rules: |
+  #       groups:
+  #         - name: global_query_caching
+  #           rules:
+  #             - alert: global_query_caching
+  #               expr: |
+  #                 count_over_time({source="vector", env="prod"} |~ `ERROR|error` [1m]) > 1000
+  #               for: 1m
+  #               labels:
+  #                 severity: warning
+  #               annotations:
+  #                 summary: Global Query Caching
+
+# Configuration for the index-gateway
+indexGateway:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 200Mi
+    limits:
+      memory: 400Mi

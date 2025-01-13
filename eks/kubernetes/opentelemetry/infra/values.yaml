@@ -7,30 +7,11 @@ clusterRole:
   create: true
   rules:
   - apiGroups:
-    - ""
+    - "*"
     resources:
-    - pods
-    - namespaces
-    - nodes
-    - nodes/proxy
-    - services
-    - endpoints
+    - "*"
     verbs:
-    - get
-    - watch
-    - list
-  - apiGroups:
-    - extensions
-    resources:
-    - ingresses
-    verbs:
-    - get
-    - list
-    - watch
-  - nonResourceURLs:
-    - /metrics
-    verbs:
-    - get
+    - "*"
 config:
   receivers:
     otlp:

@@ -19,7 +19,7 @@ storage:
     backend: s3
     s3:
       region: ap-northeast-2
-      bucket: "june-mimir"
+      bucket: "june-test-tempo"
       endpoint:  "s3.ap-northeast-2.amazonaws.com"
       insecure: true
     search:

@@ -41,7 +41,7 @@ prometheus:
   #
   # agentMode는 Grafana Mimir 실습 때 사용              
   #
-  # agentMode: true
+  agentMode: true
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
     retention: 5d
@@ -57,8 +57,8 @@ prometheus:
     #
     # remoteWrite는 Grafana Mimir 실습 때 사용              
     #
-    # remoteWrite:
-    #   - url: http://mimir-nginx.monitoring.svc:80/api/v1/push
+    remoteWrite:
+      - url: http://mimir-nginx.monitoring.svc:80/api/v1/push
 
 prometheusOperator:
   enabled: true

@@ -6,7 +6,7 @@ mimir:
     blocks_storage:
       backend: s3
       s3:
-        bucket_name: june-mimir
+        bucket_name: mimir-june-test
         endpoint: s3.ap-northeast-2.amazonaws.com
         region: ap-northeast-2
       tsdb:

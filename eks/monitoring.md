@@ -16,6 +16,7 @@ mimir endpoint: http://mimir-nginx.monitoring.svc:80/prometheus
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install loki grafana/loki-distributed -n monitoring --version 0.80.0 -f values.yaml
 helm upgrade loki grafana/loki-distributed -n monitoring -f values.yaml
+loki endpoint : http://loki-loki-distributed-gateway.monitoring.svc.cluster.local:80
 
 [vector]
 helm repo add vector https://helm.vector.dev

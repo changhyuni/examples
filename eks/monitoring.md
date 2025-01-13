@@ -30,6 +30,7 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm install tempo grafana/tempo-distributed -n monitoring --version 1.27.0 -f values.yaml
 helm upgrade tempo grafana/tempo-distributed -n monitoring -f values.yaml
 helm uninstall tempo -n monitoring
+tempo endpoint : http://tempo-query-frontend-discovery.monitoring.svc.cluster.local:3100
 
 [opentele-metry]
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts

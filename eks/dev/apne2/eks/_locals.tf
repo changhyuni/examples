@@ -10,10 +10,10 @@ locals {
   bastion_role_arn = aws_iam_role.bastion.arn
 
   # EKS Cluster Configs
-  # 각 실습마다 스펙이 변경될 수도 있음
-  node_type     = ["t3.medium"]
-  node_size     = 7
-  node_max_size = 7
+  # 각 실습마다 스펙이 변경될 수도 있음 (기본 t2.micro)
+  node_type     = ["t2.micro"]
+  node_size     = 5
+  node_max_size = 5
   node_min_size = 1
 
   addons = [
@@ -29,10 +29,18 @@ locals {
       addon_name    = "vpc-cni"
       addon_version = "v1.19.0-eksbuild.1"
     },
-    {
-      addon_name    = "aws-ebs-csi-driver"
-      addon_version = "v1.37.0-eksbuild.1"
-    }
+    #
+    # EBS CSI Driver
+    # {
+    #   addon_name    = "aws-ebs-csi-driver"
+    #   addon_version = "v1.37.0-eksbuild.1"
+    # },
+    #
+    # Pod Identity
+    # {
+    #   addon_name    = "eks-pod-identity-agent"
+    #   addon_version = "v1.3.4-eksbuild.1"
+    # }
   ]
 
   access_config = {

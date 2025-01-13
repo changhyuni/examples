@@ -27,20 +27,21 @@ grafana:
     size: 10Gi
 
   #
-  # 아래 설정 "true" 시 grafana에서 지정한 Dashboard / Datasource가 자동으로 추가됨
-  # 
-  sidecar:
-    dashboards:
-      enabled: false
-    datasources:
-      enabled: false
+  # 기본적으로 grafana에서 지정한 Dashboard / Datasource가 자동으로 추가됨
+  # 아래 설정을 통해 비활성화 가능
+  #
+  # sidecar:
+  #   dashboards:
+  #     enabled: false
+  #   datasources:
+  #     enabled: false
     
 
 prometheus:
   #
   # agentMode는 Grafana Mimir 실습 때 사용              
   #
-  agentMode: true
+  # agentMode: true
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
     retention: 5d
@@ -56,8 +57,8 @@ prometheus:
     #
     # remoteWrite는 Grafana Mimir 실습 때 사용              
     #
-    remoteWrite:
-      - url: http://mimir-nginx.monitoring.svc:80/api/v1/push
+    # remoteWrite:
+    #   - url: http://mimir-nginx.monitoring.svc:80/api/v1/push
 
 prometheusOperator:
   enabled: true

@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: a
-        image: bhs9610/python:otel-manuel-a
+        image: bhs9610/python:otel-manuel-a1
         command: ["/bin/sh"]
         args:
         - "-c"

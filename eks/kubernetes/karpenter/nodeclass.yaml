@@ -1,0 +1,34 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  amiFamily: AL2
+  amiSelectorTerms:
+    - id: "ami-00bb0fafaa7de9f05"
+  subnetSelectorTerms:
+    - tags:
+        subnet_type: private
+  securityGroupSelectorTerms:
+    - tags:
+        kubernetes.io/cluster/dev-cacoabank-cluster: owned
+  instanceProfile: eks-eaca18e4-2193-d08f-afc3-0a1abf80d72f
+  tags:
+    Name: dev-cacoabank-private-karpenter
+
+  # metadata option
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required
+
+  # EBS Option
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 10Gi
+        volumeType: gp3
+        iops: 1000
+        throughput: 125
+        deleteOnTermination: true

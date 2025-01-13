@@ -16,20 +16,23 @@ mimir endpoint: http://mimir-nginx.monitoring.svc:80/prometheus
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install loki grafana/loki-distributed -n monitoring --version 0.80.0 -f values.yaml
 helm upgrade loki grafana/loki-distributed -n monitoring -f values.yaml
+helm uninstall loki -n monitoring
 loki endpoint : http://loki-loki-distributed-gateway.monitoring.svc.cluster.local:80
 
 [vector]
 helm repo add vector https://helm.vector.dev
 helm install vector vector/vector -n monitoring --version 0.38.1 -f values.yaml
 helm upgrade vector vector/vector -n monitoring -f values.yaml
+helm uninstall vector -n monitoring
 
 [tempo]
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install tempo grafana/tempo-distributed -n monitoring --version 1.27.0 -f values.yaml
 helm upgrade tempo grafana/tempo-distributed -n monitoring -f values.yaml
+helm uninstall tempo -n monitoring
 
 [opentele-metry]
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 helm install opentelemetry open-telemetry/opentelemetry-collector -n monitoring --version 0.111.0 -f values.yaml
 helm upgrade opentelemetry open-telemetry/opentelemetry-collector -n monitoring
-helm repo update
+helm uninstall opentelemetry -n monitoring

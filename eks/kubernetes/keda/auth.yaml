@@ -1,0 +1,11 @@
+#
+# Node Role을 사용할거라 불필요함
+#
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: aws
+  namespace: keda
+# spec:
+#   podIdentity:
+#     provider: aws-iam

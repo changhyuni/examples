@@ -10,7 +10,7 @@ locals {
   bastion_role_arn = aws_iam_role.bastion.arn
 
   ## EKS Cluster Configs
-  node_type     = ["t2.micro"]
+  node_type     = ["t3.medium"]
   node_size     = 7
   node_max_size = 7
   node_min_size = 1
@@ -27,6 +27,10 @@ locals {
     {
       addon_name    = "vpc-cni"
       addon_version = "v1.19.0-eksbuild.1"
+    },
+    {
+      addon_name    = "aws-ebs-csi-driver"
+      addon_version = "v1.37.0-eksbuild.1"
     }
   ]
 

@@ -9,7 +9,8 @@ locals {
   public_subnets   = data.terraform_remote_state.network.outputs.public_subnets
   bastion_role_arn = aws_iam_role.bastion.arn
 
-  ## EKS Cluster Configs
+  # EKS Cluster Configs
+  # 각 실습마다 스펙이 변경될 수도 있음
   node_type     = ["t3.medium"]
   node_size     = 7
   node_max_size = 7

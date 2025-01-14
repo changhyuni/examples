@@ -4,7 +4,7 @@ import http from 'k6/http';
 import { sleep } from 'k6';
 
 export const options = {
-    vus: 1,                // 10 Users
+    vus: 1,                // 1 Users
     duration: '3000s',        // 
 };
 

@@ -43,3 +43,6 @@ helm uninstall atlantis -n atlantis
 
 [atlantis-command]
 https://www.runatlantis.io/docs/using-atlantis
+
+[k6s]
+https://grafana.com/docs/k6/latest/set-up/install-k6/

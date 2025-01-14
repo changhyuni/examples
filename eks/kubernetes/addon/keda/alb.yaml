@@ -4,7 +4,7 @@ metadata:
   name: alb
 spec:
   scaleTargetRef:
-    name: nginx    
+    name: nginx-deployment
   minReplicaCount: 1  
   maxReplicaCount: 20  
   pollingInterval: 10   

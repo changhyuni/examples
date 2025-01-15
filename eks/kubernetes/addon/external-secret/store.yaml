@@ -1,0 +1,13 @@
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: secretstore
+spec:
+  provider:
+    aws:
+      service: SecretsManager
+      region: ap-northeast-2
+      # auth:
+      #   jwt:
+      #     serviceAccountRef:
+      #       name: eks-sa-role  # AWS Secrets Manager 접근 권한이 있는 서비스 계정 이름

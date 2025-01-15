@@ -19,12 +19,12 @@ spec:
         - name: DB_HOST
           valueFrom:
             secretKeyRef:
-              name: app-secret
+              name: cacoabank 
               key: DB_HOST
-        - name: KAFKA_BROKERS
+        - name: APP
           valueFrom:
             secretKeyRef:
-              name: app-secret
-              key: KAFKA_BROKERS
+              name: cacoabank 
+              key: APP
         ports:
         - containerPort: 3000

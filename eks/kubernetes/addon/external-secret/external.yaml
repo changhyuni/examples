@@ -4,18 +4,18 @@ metadata:
   name: cacoabank
 spec:
   refreshInterval: 1m
-  # secretStoreRef:
-  #   name: secretstore   # 이전에 생성한 SecretStore 이름
-  #   kind: SecretStore
+  secretStoreRef:
+    name: secretstore   # 이전에 생성한 SecretStore 이름
+    kind: SecretStore
   target:
-    name: cacoabank-secret       
+    name: cacoabank     
     creationPolicy: Owner
   data:
   - secretKey: DB_HOST
     remoteRef:
-      key: "cacoabank-db"            # AWS Secrets Manager에 저장된 비밀 이름
-      property: app.DB.HOST           # JSON 경로: app → DB → HOST
-  - secretKey: KAFKA_BROKERS
+      key: "cacoabank-secret"               # AWS Secrets Manager에 저장된 비밀 이름
+      property: cacoabank.DB.HOST           # JSON 경로: cacoabank → DB → HOST
+  - secretKey: APP
     remoteRef:
-      key: "cacoabank-kafka"
-      property: app.KAFKA_BROKERS     # JSON 경로: app → KAFKA_BROKERS
+      key: "cacoabank-secret"
+      property: cacoabank.APP               # JSON 경로: cacoabank → KAFKA_BROKERS

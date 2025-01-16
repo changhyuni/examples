@@ -1,0 +1,17 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-label-namespace
+spec:
+  validationFailureAction: Enforce
+  rules:
+  - name: require-label-namespace
+    match:
+      resources:
+        kinds: ["Namespace"]
+    validate:
+      message: "해당 네임스페이스는 cacoabank 레이블이 없습니다."
+      pattern:
+        metadata:
+          labels:
+            cacoabank: "?*"

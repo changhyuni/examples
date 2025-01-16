@@ -17,3 +17,8 @@ helm install external-secrets external-secrets/external-secrets -n external-secr
 helm repo add external-dns https://kubernetes-sigs.github.io/external-dns/
 helm repo update external-dns
 helm install external-dns external-dns/external-dns --namespace external-secrets --create-namespace --version 1.15.0
+
+[kyverno]
+helm repo add kyverno https://kyverno.github.io/kyverno/
+helm repo update
+helm install kyverno kyverno/kyverno --namespace kyverno --create-namespace --version 3.3.4
